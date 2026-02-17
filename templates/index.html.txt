@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shubham’s Coffee Shop & Refreshers</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 
@@ -290,7 +290,7 @@ const closeBtn = document.querySelector(".close-btn");
 
 /* SEND ORDER TO HTTP API */
 function sendOrder(item, price) {
-  fetch("https://rku81s35d4.execute-api.ap-south-1.amazonaws.com/order", {
+  fetch("/order", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
