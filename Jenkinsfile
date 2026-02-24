@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main',   // change if needed
+                git branch: 'master',   // change if needed
                     credentialsId: 'github-credentials',
                     url: 'https://github.com/shubham101314/practice-repo-13.git'
             }
