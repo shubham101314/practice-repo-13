@@ -12,7 +12,7 @@ pipeline {
             steps {
                 git branch: 'main',   // change if needed
                     credentialsId: 'github-credentials',
-                    url: 'https://github.com/shubbham101314/practice-repo-13.git'
+                    url: 'https://github.com/shubham101314/practice-repo-13.git'
             }
         }
 
