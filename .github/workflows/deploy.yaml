@@ -1,0 +1,55 @@
+name: Deploy App
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Login to DockerHub
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+    -~/Desktop/practice-repo-13 name: Build Docker Image
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest .
+
+    - name: Push Docker Image
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
+
+       - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: terraform
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: terraform
+
+    - name: Get EC2 IP
+      id: tf-output
+      run: echo "EC2_IP=$(terraform output -raw ec2_public_ip)" >> $GITHUB_ENV
+      working-directory: terraform
+
+      host: ${{ env.EC2_IP }}
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+
+        script: |
+          docker stop my-python-app || true
+          docker rm my-python-app || true
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
+          docker run -d -p 80:5000 --name myapp ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
