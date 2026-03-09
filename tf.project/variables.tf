@@ -1,0 +1,9 @@
+variable "vpc_id" {	default = "vpc-018029c149e4e5f62"}
+variable "subnet_id" {	default = "subnet-0664257d699b9e4f6"}
+variable "s3_bucket_name" {	default = "tf-pjkt-13"}
+variable "ami_id" {	default = "ami-0ff5003538b60d5ec"}
+variable "instance_type" {	default = "t2.micro"}
+variable "key_name" {	default = "110-pem-key"}
+variable "security_group_id" {	default = "sg-075c92fc2d1772b35"}
+variable "iam_instance_profile" {	default = "104-EC2-Role"}
+variable "tag_name" {	default = "my-ec2-instance"}

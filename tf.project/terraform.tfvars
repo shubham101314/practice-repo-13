@@ -1,0 +1,8 @@
+vpc_id              = "vpc-018029c149e4e5f62"
+subnet_id           = "subnet-0664257d699b9e4f6"
+security_group_id   = "sg-075c92fc2d1772b35"
+ami_id              = "ami-019715e0d74f695be"
+instance_type       = "t2.micro"
+key_name            = "110-pem-key"
+iam_instance_profile = "104-EC2-Role"
+tag_name            = "my-ec2-instance"
