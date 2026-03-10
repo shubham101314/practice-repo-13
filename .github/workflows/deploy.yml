@@ -30,7 +30,7 @@ jobs:
         working-directory: terraform
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply 
         working-directory: terraform
 
       - name: Get EC2 IP
