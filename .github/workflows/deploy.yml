@@ -13,8 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Debug secrets
+          run: |
+            echo "Username length: ${#DOCKER_USER}"
+          env:
+            DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
       - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest .
@@ -49,3 +57,6 @@ jobs:
             docker rm my-python-app || true
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
             docker run -d -p 80:5000 --name my-python-app ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
+
+
+
