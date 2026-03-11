@@ -1,3 +1,4 @@
+
 name: Deploy App
 
 on:
@@ -14,10 +15,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Debug secrets
-          run: |
-            echo "Username length: ${#DOCKER_USER}"
-          env:
-            DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
+          echo "Username length: ${#DOCKER_USER}"
+        env:
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
@@ -34,17 +36,16 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
         working-directory: terraform
+        run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply 
         working-directory: terraform
+        run: terraform apply -auto-approve
 
       - name: Get EC2 IP
-        id: tf-output
-        run: echo "EC2_IP=$(terraform output -raw ec2_public_ip)" >> $GITHUB_ENV
         working-directory: terraform
+        run: echo "EC2_IP=$(terraform output -raw ec2_public_ip)" >> $GITHUB_ENV
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
@@ -57,6 +58,3 @@ jobs:
             docker rm my-python-app || true
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
             docker run -d -p 80:5000 --name my-python-app ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
-
-
-
